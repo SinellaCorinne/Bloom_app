@@ -1,0 +1,50 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace = "com.example.bloom_app"
+    compileSdk = 35 // ✅ Explicite
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled = true  // ✅ AJOUTÉ : requis pour invoke-customs
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'  // ✅ Correction: string, pas JavaVersion
+    }
+
+    defaultConfig {
+        applicationId = "com.example.bloom_app"
+
+        // ✅ MODIFIÉ : minSdk 26 requis pour invoke-customs
+        minSdk = 26
+
+        targetSdk = 35
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.debug
+        }
+    }
+}
+
+// ✅ AJOUTÉ : Dépendance de desugaring pour Java 8+ features
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    implementation platform('com.google.firebase:firebase-bom:34.11.0')
+    implementation 'com.google.firebase:firebase-analytics'
+}
+
+flutter {
+    source = "../.."
+}
